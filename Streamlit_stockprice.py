@@ -1,6 +1,3 @@
-# yfinanceのインストール
-$pip install yfinance
-
 # ライブラリをインポートする
 import pandas as pd
 import yfinance as yf
