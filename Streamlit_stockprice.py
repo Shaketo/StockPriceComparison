@@ -1,5 +1,5 @@
 # yfinanceのインストール
-!pip install yfinance
+$pip install yfinance
 
 # ライブラリをインポートする
 import pandas as pd
