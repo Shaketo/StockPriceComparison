@@ -5,17 +5,17 @@ import altair as alt
 import streamlit as st
 
 # アプリのタイトルを表示する
-st.title('株価の変動を可視化できます')
+st.title('株価の変動を可視化しましょう')
 
 # サイドバーに説明を表示する
 st.sidebar.write("""
 # 株価
 これは株価の変動を可視化するツールです。
-下のバーで期間やグラフの縦軸の範囲を指定できます。
+下のバーで期間やグラフの縦軸の範囲を指定すると、すぐにグラフに反映できます。
 """)
 
 st.sidebar.write("""
-## 下のバーで指定した期間の株価変動をグラフに描画します               
+## 対象期間
 """)
 
 # 期間の表示を設定する
@@ -34,7 +34,7 @@ period_display = {
 }
 
 # 表示期間選択のためのスライダーを表示する
-data_period = st.sidebar.select_slider('期間',
+data_period = st.sidebar.select_slider('スライドさせて選択できます',
                                  options= [
                                      '1d', 
                                      '5d', 
@@ -73,10 +73,10 @@ def get_data(data_period, tickers):
 
 try:
     st.sidebar.write("""
-    ## 下のバーでグラフの縦軸(株価)の範囲が変更できます                 
+    ## 縦軸(株価)の範囲指定              
     """)
     ymin, ymax = st.sidebar.slider(
-        '範囲を指定してください。',
+        '左橋と右端を動かせます',
         0.0, 3500.0, (0.0, 3500.0)
     )
 
@@ -94,13 +94,13 @@ try:
 
     df = get_data(data_period, tickers)
     companies = st.multiselect(
-        '会社名を選択してください。',
+        '会社名を選択してください',
         list(df.index),
         ['Google', 'Amazon', 'Meta', 'Apple']
     )
 
     if not companies: # 会社名が選択されていない場合に選ぶよう促す
-        st.error('少なくとも１社は選んでください。')
+        st.error('少なくとも１社は選んでください')
 
     else:
         data = df.loc[companies]
