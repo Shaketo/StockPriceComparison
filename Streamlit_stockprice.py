@@ -8,7 +8,7 @@ import streamlit as st
 st.title('株価可視化アプリ')
 
 # サイドバーに説明を表示する
-st.sidebar.write(""""
+st.sidebar.write("""
 # 株価
 これは株価可視化ツールです。以下のオプションから本日から数えた期間を指定できます。                 
 """)
