@@ -5,16 +5,17 @@ import altair as alt
 import streamlit as st
 
 # アプリのタイトルを表示する
-st.title('株価可視化アプリ')
+st.title('株価の変動を可視化できます')
 
 # サイドバーに説明を表示する
 st.sidebar.write("""
 # 株価
-これは株価可視化ツールです。以下のオプションから本日から数えた期間を指定できます。                 
+これは株価の変動を可視化するツールです。
+下のバーで期間やグラフの縦軸の範囲を指定できます。
 """)
 
 st.sidebar.write("""
-## 対象期間選択               
+## 下のバーで指定した期間の株価変動をグラフに描画します               
 """)
 
 # 期間の表示を設定する
@@ -72,7 +73,7 @@ def get_data(data_period, tickers):
 
 try:
     st.sidebar.write("""
-    ## 株価の範囲指定                 
+    ## 下のバーでグラフの縦軸(株価)の範囲が変更できます                 
     """)
     ymin, ymax = st.sidebar.slider(
         '範囲を指定してください。',
