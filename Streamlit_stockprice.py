@@ -11,7 +11,7 @@ st.title('株価の変動を可視化しましょう')
 st.sidebar.write("""
 # 株価
 これは株価の変動を可視化するツールです。
-下のバーで期間やグラフの縦軸の範囲を指定すると、すぐにグラフに反映できます。
+下のバーで対象期間や、グラフの縦軸の範囲を指定するとグラフに反映できます。
 """)
 
 st.sidebar.write("""
@@ -73,7 +73,7 @@ def get_data(data_period, tickers):
 
 try:
     st.sidebar.write("""
-    ## 縦軸(株価)の範囲指定              
+    ## 縦軸(株価)の範囲              
     """)
     ymin, ymax = st.sidebar.slider(
         '左端と右端を動かせます',
