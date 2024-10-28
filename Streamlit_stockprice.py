@@ -14,6 +14,7 @@ st.sidebar.write("""
 下のバーで対象期間や、グラフの縦軸の範囲を指定するとグラフに反映できます。
 """)
 
+# サイドバーに期間指定用のスライダーのタイトルを表示する
 st.sidebar.write("""
 ## 対象期間
 """)
@@ -33,7 +34,7 @@ period_display = {
     'max': "過去全て"        
 }
 
-# 表示期間選択のためのスライダーを表示する
+# 表示期間選択のためのスライダーをサイドバーに表示して変数data_periodに指定期間を代入する
 data_period = st.sidebar.select_slider('スライドさせて選択できます',
                                  options= [
                                      '1d', 
@@ -51,12 +52,15 @@ data_period = st.sidebar.select_slider('スライドさせて選択できます'
                                  )
 
 
-
+# メインフレームに株価を取得する期間を表示する
 st.write(f"""
 ### **{period_display[data_period]}** の株価         
 """)
 
+# キャッシュのクリアをする
 @st.cache_data
+
+# 選択された会社について指定期間の株価を取得してDataFrameに追加する関数を用意する
 def get_data(data_period, tickers):
     df = pd.DataFrame()
     for company in tickers.keys():
@@ -71,15 +75,20 @@ def get_data(data_period, tickers):
         df = pd.concat([df, hist])
     return df
 
+
 try:
+    # サイドバーにグラフの縦軸の範囲指定用のスライダータイトルを表示する
     st.sidebar.write("""
     ## 縦軸(株価)の範囲              
     """)
+
+    # サイドバーにグラフの縦軸の範囲指定用スライダーを表示し変数yminに範囲の最小値を、変数ymaxに範囲の最大値を代入する
     ymin, ymax = st.sidebar.slider(
         '左端と右端を動かせます',
         0.0, 3500.0, (0.0, 3500.0)
     )
 
+    # 選択する会社の表示名と株価取得用の名称を対にして設定する
     tickers = {
         'Apple': 'AAPL',
         'Meta': 'META',
@@ -92,24 +101,29 @@ try:
         'GM' : 'GM',
     }
 
+    # 関数を呼び出して株価を取得しDataFrameに代入しておく
     df = get_data(data_period, tickers)
+
+    # 会社名の選択肢を表示する
     companies = st.multiselect(
         '会社名を選択してください',
         list(df.index),
-        ['Google', 'Amazon', 'Meta', 'Apple']
+        ['Google', 'Amazon', 'Meta', 'Apple', 'Tesla', 'Netflix']
     )
 
     if not companies: # 会社名が選択されていない場合に選ぶよう促す
         st.error('少なくとも１社は選んでください')
 
     else:
+        # 選択された会社について株価の表を表示する
         data = df.loc[companies]
         st.write("### 株価 (USD)", data)
         data = data.T.reset_index()
         data = pd.melt(data, id_vars=['Date']).rename(
             columns={'value': 'Stock Prices(USD)'}
         )
-        
+
+        # グラフを描画する
         chart = (
             alt.Chart(data)
             .mark_line(opacity=0.8, clip=True)
@@ -123,5 +137,3 @@ try:
         
 except: # エラーの場合にその旨を知らせるコメントを表示する
     st.error("エラーが発生しました。")
-
-# streamlit run c:\Users\Mami\Documents\Python\Streamlit_stockprice.py
